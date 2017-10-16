@@ -346,6 +346,7 @@ sub submit_select{
     set_player_state($CURR_PLAYER, &DISABLED);
     $REM_PLAYERS--;
     pause_turn(2);
+    set_dialog($PERP_TEXT[$PERPS_DISP], &TXT_NORM);
     pass();
   }
 }
