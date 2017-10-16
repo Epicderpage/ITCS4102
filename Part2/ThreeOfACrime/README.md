@@ -48,6 +48,3 @@ Game images were created using modified vectors created by [visionheldup](https:
 * Brandon Beckwith
 * Bryson Roland
 * Haely Pratt [primary]
-
-Credits:
-Game images are modified from vectors created by <URL:https://www.vecteezy.com/members/visionheldup>, which can be downloaded from <URL:https://www.vecteezy.com/vector-art/119207-mugshot-vector-people-two>.
