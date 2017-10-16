@@ -409,22 +409,13 @@ sub show_instr{
   my $instr_str = <<'EOInstr';
 
 
-Three-Of-A-Crime is a logic game for up to three players. At the start of the game, three
-of the seven criminals are chosen as perpetrators. At the start of each round, three
-criminals will be displayed and the players will be told how many of the criminals
-displayed are perpetrators (up to two of the displayed criminals may be perpetrators).
-Players will use logic to determine which of the criminals are the actual perpetrators.
+Three-Of-A-Crime is a logic game for up to three players. The goal of the game is to identify the three perpetrators of a crime from a set of seven criminals. During each round, the computer will display three randomly selected criminals and tell the players how many of these criminals are perpetrators, but not which. Up to two of the displayed criminals may be perpetrators. Players will use logic to deduce which criminals are the perpetrators.
 
 
-During a round, each player takes a turn. A player may either guess which three criminals
-are the perpetrators or pass the turn to the next player. If a player chooses to guess and
-guesses incorrectly, that player is out of the game, and the game continues with the
-remaining players. Once all players have taken their turn, a new round begins and a new
-set of criminals will be displayed.
+Each player may choose to guess which criminals are the perpetrators or pass to the next player. Once all players have taken a turn (either by guessing incorrectly or passing), a new set of criminals will be displayed. If a player chooses to identify the perpetrators and guesses incorrectly, that player is out of the game.
 
 
-The game continues until some player correctly identifies the perpetrators or until all
-players have guessed incorrectly.
+The game continues until a player chooses correctly, or until all players have chosen incorrectly.
 EOInstr
   # Make the paragraphs into one long line
   $instr_str =~ s/\n(?!\n)/ /g;
