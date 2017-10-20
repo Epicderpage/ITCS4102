@@ -1,0 +1,2 @@
+This is a test file
+it has exactly 12 words excluding the number
