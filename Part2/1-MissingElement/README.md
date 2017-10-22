@@ -22,10 +22,10 @@ This will produce output similar to the following.
 Missing: 14
 ```
 
-To run the script using a user-defined array, run the command with array elements listed after the filename with each element separated by a space. An example, along with example output, is shown below.
+To run the script using a user-defined array, run the command `perl missing.pl` followed by the list of array elements with each element separated by a space. An example, along with its output, is shown below.
 
 ```
-$ perl missing.pl 4 1 0 2 9 6 8 7 5 3
+perl missing.pl 4 1 0 2 9 6 8 7 5 3
 
 4 1 0 2 9 6 8 7 5 3
 3 6 0 9 2 1 5 8 4
