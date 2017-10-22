@@ -4,9 +4,11 @@ Given an array of non-negative integers, a second array is formed by shuffling t
 
 ## Getting Started
 
-This implementation is built in Perl 5. To run the game, an equivalent version of Perl must be installed.
+This implementation is built in Perl 5. To run the script, an equivalent version of Perl must be installed.
 
 ### Running the Script
+
+### Running with the default array
 
 To run the script using the default array, run the following command in a terminal window.
 
@@ -21,6 +23,8 @@ This will produce output similar to the following.
 7 0 16 8 4 2 3 12 6 11 1 13 9 15 10 5
 Missing: 14
 ```
+
+### Running with a user-defined array
 
 To run the script using a user-defined array, run the command `perl missing.pl` followed by the list of array elements with each element separated by a space. An example, along with its output, is shown below.
 

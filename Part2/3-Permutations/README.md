@@ -4,7 +4,7 @@ This program generates all permutations of a given string using Heap's algorithm
 
 ## Getting Started
 
-This implementation is built in Perl 5. To run the game, an equivalent version of Perl must be installed.
+This implementation is built in Perl 5. To run the script, an equivalent version of Perl must be installed.
 
 ### Running the Script
 

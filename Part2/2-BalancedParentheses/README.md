@@ -4,11 +4,13 @@ Given a string of opening and closing parentheses (), brackets [], and braces {}
 
 ## Getting Started
 
-This implementation is built in Perl 5. To run the game, an equivalent version of Perl must be installed.
+This implementation is built in Perl 5. To run the script, an equivalent version of Perl must be installed.
 
 ### Running the Script
 
 To run the script from a terminal window, enter the command `perl balanced.pl` followed by the string of parenthetic characters (do not separate characters by spaces). Examples, along with their output, are shown below.
+
+**Example**
 
 ```
 perl balanced.pl {}([])
