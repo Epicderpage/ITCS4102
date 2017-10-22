@@ -83,6 +83,9 @@ $mainWindow->configure(-background => &GLOBAL_BG, -cursor => 'left_ptr');
 $mainWindow->geometry('1024x768');
 #-----------------------------------------------------------------------------------------
 # Menus
+# 
+# File > New 1-Player Game | New 2-Player Game | New 3-Player Game | Quit
+# Help > How to Play | About
 #-----------------------------------------------------------------------------------------
 my $menu = $mainWindow->Menu;
 $menu->cascade(
@@ -106,6 +109,8 @@ $menu->cascade(
 $mainWindow->configure(-menu => $menu);
 #-----------------------------------------------------------------------------------------
 # Start Frame
+#
+# Contains buttons to start a new 1-, 2-, or 3-player game and to quit.
 #-----------------------------------------------------------------------------------------
 my $startFrame = $mainWindow->Frame(-background => &GLOBAL_BG);
 my $btn = $startFrame->Button(@BTN_CONFIG)->grid(-padx => 10, -pady => 10);
@@ -118,16 +123,22 @@ $btn = $startFrame->Button(@BTN_CONFIG)->grid(-padx => 10, -pady => 10);
 $btn->configure(-text => 'Quit', -command => sub{ exit });
 #-----------------------------------------------------------------------------------------
 # Player Frame
+#
+# Contains the player labels.
 #-----------------------------------------------------------------------------------------
 my $playerFrame = $mainWindow->Frame(-background => &GLOBAL_BG);
 #-----------------------------------------------------------------------------------------
 # Dialog Frame
+# 
+# Contains a dialog label used to display text to the user(s).
 #-----------------------------------------------------------------------------------------
 my $dialogFrame = $mainWindow->Frame(-background => &GLOBAL_BG);
 my $dialogText = $dialogFrame->Label(-height => 2, -background => &DIALOG_BG,
   -foreground => &GLOBAL_TXT)->pack(-fill => 'x', -expand => 1);
 #-----------------------------------------------------------------------------------------
 # Display Frame
+# 
+# Contains the three criminal images which are displayed to the user(s).
 #-----------------------------------------------------------------------------------------
 my $displayFrame = $mainWindow->Frame(-background => &GLOBAL_BG);
 foreach my $c (1..&NUM_CRIMS){
@@ -142,6 +153,8 @@ foreach my $c (1..&CRIMS_DISP){
 }
 #-----------------------------------------------------------------------------------------
 # Player Turn Interactions Frame
+# 
+# Contains buttons for player interactions: identify the perpetrators or pass.
 #-----------------------------------------------------------------------------------------
 my $turnFrame = $mainWindow->Frame(-background => &GLOBAL_BG);
 $btn = $turnFrame->Button(@BTN_CONFIG)->pack(-side => 'left', -expand => 1);
@@ -150,6 +163,10 @@ $btn = $turnFrame->Button(@BTN_CONFIG)->pack(-side => 'left', -expand => 1);
 $btn->configure(-text => 'Pass', -command => [\&pass]);
 #-----------------------------------------------------------------------------------------
 # Criminal Selection Frame
+# 
+# Contains the entire set of criminals for the user(s) to select from when identifying the
+# actual perpetrators. A maximum of three criminals may be selected at any time, and only
+# when three are selected does the 'Done' button become enabled.
 #-----------------------------------------------------------------------------------------
 my $selectFrame = $mainWindow->Frame(-background => &GLOBAL_BG);
 foreach my $c (1..NUM_CRIMS){
@@ -169,12 +186,20 @@ $submitBtn->configure(
 $submitBtn->grid(-row => 1, -column => 3, -sticky => 'nesw', -padx => 10, -pady => 10);
 #-----------------------------------------------------------------------------------------
 # Cancel Criminal Selection Frame
+# 
+# Contains a button to cancel the 'Identify Perpetrators' action. This returns the game to
+# the previous state.
 #-----------------------------------------------------------------------------------------
 my $cancelFrame = $mainWindow->Frame(-background => &GLOBAL_BG);
 $btn = $cancelFrame->Button(@BTN_CONFIG)->pack(-side => 'left', -expand => 1);
 $btn->configure(-text => 'Cancel', -command => [\&set_page, PG_TURNS]);
 #-----------------------------------------------------------------------------------------
 # Page Members
+# 
+# Each game page contains a subset of frames which must be hidden/shown when a page is
+# moved away from, or moved to, respectively. Pages represent the current state of the
+# game (e.g. 'START' -> no game has been started; 'TURNS' -> a player is taking their
+# turn, 'CRSEL' (criminal selection) -> a player has chosen to identify the perpetrators).
 #-----------------------------------------------------------------------------------------
 my %PAGE_MEMBERS = (
   &PG_START =>  [$startFrame],
@@ -196,44 +221,70 @@ MainLoop;
 # Start a new game
 #-----------------------------------------------------------------------------------------
 sub new_game{
-  $REM_PLAYERS = shift;
-  init_players();
-  init_perpetrators();
-  init_criminals();
-  set_page(&PG_TURNS);
+  $REM_PLAYERS = shift; # Get the number of players for this game
+  init_players();       # Initialize the new players
+  init_perpetrators();  # Initialize the randomly selected perpetrators
+  init_criminals();     # Initialize the first set of criminals to display
+  set_page(&PG_TURNS);  # Set the current page to the 'Player Turns' page
 }
 #-----------------------------------------------------------------------------------------
 # Transition to new game page
 #-----------------------------------------------------------------------------------------
 sub set_page{
-  my $new_page = shift;
+  my $new_page = shift; # Get the page to move to
+  
+  # Hide all frames which are members of the current page
   unless(not defined $CURR_PAGE){
     foreach my $pgmem (@{$PAGE_MEMBERS{$CURR_PAGE}}){ $pgmem->packForget; }
   }
+  
   # Some pages require special setups
   if($new_page eq &PG_TURNS){
+    
+    # If moving to the 'Player Turns' page, set the dialog text to display the number
+    # of perpetrators in the criminals displayed
     set_dialog($PERP_TEXT[$PERPS_DISP], &TXT_NORM);
+    
   }elsif($new_page eq &PG_CRSEL){
+    
+    # If moving to the 'Criminal Selection' page, reset all checkbuttons, ensure the
+    # initial state of the 'Done' button is disabled, and set the dialog text to tell
+    # the current player to select the appropriate number of criminals
     foreach my $chkbtn (@CRIM_CHKBTN){
-      $chkbtn->configure(-state => 'normal'); $chkbtn->deselect;
+      $chkbtn->configure(-state => 'normal');
+      $chkbtn->deselect;
     }
     $submitBtn->configure(-state => 'disabled');
     set_dialog('Select the three perpetrators', &TXT_NORM);
+    
   }elsif($new_page eq &PG_GMLST){
+    
+    # If moving to the 'Game Lost' page, set the dialog text to 'GAME OVER'
     set_dialog('GAME OVER', &TXT_EMPH);
+    
   }elsif($new_page eq &PG_GMWON){
+    
+    # If moving to the 'Game Won' page, set the dialog text to display which player has
+    # won, and display the (jailed) perpetrators
     set_dialog("Player $CURR_PLAYER Wins!", &TXT_EMPH);
     set_display(\@PERPS, &IMG_JAIL);
+    
   }
+  
+  # Show all frames which are members of the page to move to
   foreach my $pgmem (@{$PAGE_MEMBERS{$new_page}}){
     $pgmem->pack(-padx => 10, -pady => 10, -fill => 'x', -expand => 1);
   }
+  
+  # Update the current page
   $CURR_PAGE = $new_page;
 }
 #-----------------------------------------------------------------------------------------
 # Set the displayed images
 #-----------------------------------------------------------------------------------------
 sub set_display{
+  # Updates the images shown in the display frame to those specified by the array at
+  # address $addr, from the image set $set
   my $addr = shift; my $set = shift; my @ids = @{$addr};
   for(my $i = 0; $i < @ids && $i < @DISP_IMG; $i++){
     $DISP_IMG[$i]->configure(-image => $IMG{$ids[$i]}{$set});
@@ -243,6 +294,8 @@ sub set_display{
 # Set the dialog text
 #-----------------------------------------------------------------------------------------
 sub set_dialog{
+  # Sets the dialog displayed in the dialog frame to the text specified in the first
+  # argument with font settings specified in the second argument
   my $str = shift; my $font = shift;
   $dialogText->configure(-text => $str, -font => $font);
 }
@@ -250,6 +303,9 @@ sub set_dialog{
 # Set the player state
 #-----------------------------------------------------------------------------------------
 sub set_player_state{
+  # Sets the state of the player specified by the first argument to the state specified
+  # in the second argument and updates how the player label is displayed based on the
+  # state of the player
   my $player = shift; my $state = shift;
   $PLAYERS{$player}{'state'} = $state;
   if($state eq &ACTIVE){
@@ -271,30 +327,42 @@ sub set_player_state{
 #-----------------------------------------------------------------------------------------
 sub init_players{
   %PLAYERS = ();
+  # Remove any existing players from the player frame
   if($playerFrame->children){
     foreach my $child ($playerFrame->children){ $child->destroy; }
   }
+  # Create a new player label and set the player state to inactive for each of the new
+  # players [the number of starting players will be equal to the 'remaining players'
   foreach my $player (1..$REM_PLAYERS){
     $PLAYERS{$player}{'label'} = $playerFrame->Label(
       -text => "Player $player", -font => &TXT_NORM, -height => 3, -width => 32,
     )->pack(-side => 'left', -expand => 1);
     set_player_state($player, &INACTIVE);
   }
+  # Set the first player's state to active (i.e. it's their turn)
   $CURR_PLAYER = 1;
   set_player_state($CURR_PLAYER, &ACTIVE);
 }
 #-----------------------------------------------------------------------------------------
 # Initialize new perpetrators
 #-----------------------------------------------------------------------------------------
-sub init_perpetrators{ @PERPS = (shuffle 1..&NUM_CRIMS)[0..&NUM_PERPS-1]; }
+sub init_perpetrators{
+  # Selects a random subset of size NUM_PERPS from the set of criminals 1 thru NUM_CRIMS
+  @PERPS = (shuffle 1..&NUM_CRIMS)[0..&NUM_PERPS-1];
+}
 #-----------------------------------------------------------------------------------------
 # Initialize a new subset of criminals
 #-----------------------------------------------------------------------------------------
 sub init_criminals{
+  # Selects a random subset of size CRIMS_DISP from the set of criminals 1 thru NUM_CRIMS
+  # A maximum of MAX_PERPS_DISP of these criminals can be perpetrators
   do{
     @CRIMS = (shuffle 1..&NUM_CRIMS)[0..&CRIMS_DISP-1];
     $PERPS_DISP = intersection(\@CRIMS,\@PERPS);
   }while($PERPS_DISP > &MAX_PERPS_DISP);
+  
+  # Display the criminals selected and update the dialog to tell players how many of the
+  # selected criminals are perpetrators
   set_display(\@CRIMS, &IMG_LNUP);
   set_dialog($PERP_TEXT[$PERPS_DISP], &TXT_NORM);
 }
@@ -302,6 +370,8 @@ sub init_criminals{
 # Find the intersection of two lists
 #-----------------------------------------------------------------------------------------
 sub intersection{
+  # Creates a new list which is the (set) intersection of the two lists located at
+  # the specified addresses $a and $b
   my $a = shift; my $b = shift; my @isect = ();
   foreach my $e (@{$a}){ push(@isect, $e) if $e ~~ @{$b}; }
   return @isect;
@@ -310,6 +380,8 @@ sub intersection{
 # Pause player turn
 #-----------------------------------------------------------------------------------------
 sub pause_turn{
+  # Simulates a pause in the game for the number of seconds specified in $sec by setting
+  # player turn buttons to disabled, then reenabled them at the end of the pause
   my $sec = shift;
   foreach my $btn ($turnFrame->children){ $btn->configure(-state => 'disabled'); }
   $mainWindow->update; sleep($sec);
@@ -319,6 +391,10 @@ sub pause_turn{
 # Validate criminal selection
 #-----------------------------------------------------------------------------------------
 sub validate_select{
+  # During the selection of criminals, a maximum of NUM_PERPS criminals may be selected,
+  # at which point, the submission button is enabled; if less than the number of
+  # perpetrators have been selected, all checkbuttons are made clickable, and the submit
+  # button is disabled
   if((reduce {$a + $b} @SELECTED) eq &NUM_PERPS){
     for(my $i = 0; $i < @SELECTED; $i++){
       if(!$SELECTED[$i]){ $CRIM_CHKBTN[$i]->configure(-state => 'disabled'); }
@@ -333,14 +409,24 @@ sub validate_select{
 # Submit criminal selection
 #-----------------------------------------------------------------------------------------
 sub submit_select{
+  # Get the set of player-selected criminals
   my @selectedCriminals;
   for(my $i = 0; $i < @SELECTED; $i++){
     if($SELECTED[$i]){ push @selectedCriminals, $i+1; }
   }
+  
+  # Set the current page back to to the player turn page
   set_page(&PG_TURNS);
+  
   if(intersection(\@selectedCriminals,\@PERPS) == &NUM_PERPS){
+    # If the number of elements in the intersection of the selected criminals and the
+    # actual perpetrators is equal to the number of perpetrators, the player wins, socket
+    # transition to the 'Game Won' page
     set_page(&PG_GMWON);
   }else{
+    # Otherwise, the player has selected incorrectly and loses the game, so alert the
+    # players via game dialog, set the current player to disabled, pause the turn, and
+    # pass the turn to the next player (game over is handled in pass function)
     my $str = "Player $CURR_PLAYER chose incorrectly! Player $CURR_PLAYER lost!";
     set_dialog($str, &TXT_NORM);
     set_player_state($CURR_PLAYER, &DISABLED);
@@ -355,11 +441,16 @@ sub submit_select{
 #-----------------------------------------------------------------------------------------
 sub pass{
   if($REM_PLAYERS == 0){
+    # If no players remain, the game has been lost, so transition to the 'Game Lost' page
     set_page(&PG_GMLST);
   }else{
+    # Set the current player to inactive unless they have lost the game
     unless($PLAYERS{$CURR_PLAYER}{'state'} eq &DISABLED){
       set_player_state($CURR_PLAYER, &INACTIVE);
     }
+    # Move to the next available player; if the end of the list of players has been
+    # reached, display a new set of criminals and the respective dialog, and wrap the
+    # player turn marker
     do{
       $CURR_PLAYER++;
       if($CURR_PLAYER > keys %PLAYERS){
