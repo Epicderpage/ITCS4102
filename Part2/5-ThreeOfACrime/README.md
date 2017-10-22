@@ -47,4 +47,4 @@ Game images were created using modified vectors created by [visionheldup](https:
 ### Authors
 * Brandon Beckwith
 * Bryson Roland
-* Haely Pratt [primary]
+* Haely Pratt
