@@ -4,8 +4,8 @@ use strict;
 use warnings;
 use Data::Dumper qw(Dumper);
 
-#Process 
-our $input = shift;
+#Process input
+our $input = $ARGV[0] or die "Not enough arguments. Expected string of characters.\n";
 my @chars = split(//, $input);
 my $len = scalar @chars;
 
