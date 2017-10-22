@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 #Take in input
-$_ = shift;
+$_ = $ARGV[0] or die "Not enough arguments. Expected string of parenthetic characters.\n";
 
 #Loop and remove each matched pair
 while (1){
