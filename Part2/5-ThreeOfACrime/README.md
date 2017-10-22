@@ -45,6 +45,6 @@ perl ThreeOfACrime.pl
 Game images were created using modified vectors created by [visionheldup](https://www.vecteezy.com/members/visionheldup), which can be downloaded from [Vecteezy](https://www.vecteezy.com/vector-art/119207-mugshot-vector-people-two).
 
 ### Authors
-* Brandon Beckwith
+* [Brandon Beckwith](https://github.com/bbeckwi2)
 * Bryson Roland
-* Haely Pratt
+* [Haely Pratt](https://github.com/haelypratt)
