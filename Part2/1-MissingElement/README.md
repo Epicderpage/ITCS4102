@@ -34,6 +34,6 @@ Missing: 7
 
 ## Authors
 
-* Brandon Beckwith
+* [Brandon Beckwith](https://github.com/bbeckwi2)
 * Bryson Roland
-* Haely Pratt
+* [Haely Pratt](https://github.com/haelypratt)
