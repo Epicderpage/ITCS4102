@@ -8,7 +8,7 @@ This implementation is built in Perl 5. To run the script, an equivalent version
 
 ### Running the Script
 
-### Running with the default array
+#### Running with the default array
 
 To run the script using the default array, run the following command in a terminal window.
 
@@ -24,9 +24,11 @@ This will produce output similar to the following.
 Missing: 14
 ```
 
-### Running with a user-defined array
+#### Running with a user-defined array
 
 To run the script using a user-defined array, run the command `perl missing.pl` followed by the list of array elements with each element separated by a space. An example, along with its output, is shown below.
+
+**Example**
 
 ```
 perl missing.pl 4 1 0 2 9 6 8 7 5 3
