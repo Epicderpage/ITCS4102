@@ -5,7 +5,7 @@ use warnings;
 
 my $count = 0;
 splice @ARGV, 1; #Remove extra parameters
-my $name = @ARGV[0] or die "Not enough variables\n"; #Keep the name for later use and ensure it exists
+my $name = $ARGV[0] or die "Not enough variables\n"; #Keep the name for later use and ensure it exists
 
 #Loop through all the lines in all the files given as parameters
 while (my $line = <>){ 
