@@ -2,7 +2,6 @@
 
 use strict;
 use warnings;
-#use Data::Dumper qw(Dumper);
 
 # Process input
 our $input = $ARGV[0] or die "Not enough arguments. Expected string of characters.\n";
