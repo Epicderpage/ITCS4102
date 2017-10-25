@@ -1,6 +1,6 @@
 # Check Balanced Paretheses
 
-Given a string of opening and closing parentheses (), brackets [], and braces {}, this program determins whether it is balanced. This assumes that the string does not contain any other characters.
+Given a string of opening and closing parentheses (), brackets [], and braces {}, this program determines whether it is balanced. The program assumes that the string does not contain any other characters.
 
 ## Getting Started
 
